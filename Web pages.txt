@@ -1,2 +1,4 @@
 https://raw.githubusercontent.com/Pilgrim159/Test01/main/File%20Format%20Specification%20Text%20Version.txt
+
 https://raw.githubusercontent.com/Pilgrim159/Test01/main/Level%20Upgrade%20Cost%20Table%20text%20version.txt
+
