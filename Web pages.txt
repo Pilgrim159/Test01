@@ -1,0 +1,3 @@
+﻿https://github.com/Pilgrim159/Test01/blob/main/File%20Format%20Specification%20Text%20Version.txt
+https://github.com/Pilgrim159/Test01/blob/main/LevelUpgradecosttable
+
