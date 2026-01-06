@@ -1,0 +1,338 @@
+﻿LAST WAR BASIC FILE FORMAT SPECIFICATION (MASTER COPY)
+Part 1 of 2 Parts
+PURPOSE OF THIS SPECIFICATION
+=========================================================
+This document defines the complete file format, structural rules, semantic rules, and validation requirements for all Last War data files. Its purpose is to ensure that an validator, parser, or AI assistant can reliably interpret, validate, and reason about files written in this format.
+This specification establishes:
+• The required file skeleton and structural tags
+• The rules governing header fields and metadata
+• The structure and behavior of Columnar Tables
+• Type enforcement rules for typed columns
+• Semantic validation rules and rule precedence
+• Scope rules for global and account-specific data
+• File-type definitions and required behaviors
+• Validator behavior requirements for deterministic,
+  non-heuristic validation
+
+Any system reading a file written in this format must use this specification as the authoritative reference for how to interpret, validate, and process the file’s contents.
+END OF PURPOSE
+=========================================================
+Version: 1.0 — Stable Structure for Word Storage and Chat Reuse
+=========================================================
+SECTION 1 — FILE STRUCTURE OVERVIEW
+=========================================================
+Every file in this format must contain the following four structural tags, in this exact order:
+Code
+Header:Begin
+Header:End
+Data:Begin
+Data:End
+These tags define the outer boundaries of the file. They must appear exactly as written, with matching capitalization and punctuation.
+A file containing only these four lines is considered structurally valid.
+=========================================================
+SECTION 2 — HEADER BLOCK
+=========================================================
+The header block is defined by:
+Code
+Header:Begin
+... (optional header fields)
+Header:End
+2.1 Header Block Rules
+• The header block may be empty.
+• All header fields, if present, must appear between Header:Begin and Header:End.
+• Header fields use the format:
+Code
+Tag:Value
+• Tags must not be duplicated.
+• Values may contain spaces but not line breaks.
+2.2 Minimum Header Block
+Code
+Header:Begin
+Header:End
+=========================================================
+2.3 STANDARD HEADER FIELDS
+=========================================================
+This subsection defines a set of standard header fields that may appear in the Header Block of any file. These fields provide consistent metadata across all file types and support validation, versioning, and organization.
+Standard header fields do not alter the structure of the Header Block. They follow the same rules defined in Section 2.1:
+• Format: Tag:Value
+• Tags must not be duplicated
+• Values may contain spaces but not line breaks
+• Header fields may appear in any order
+The Scope: field is defined separately in Section 10.
+2.3.1 Name
+Code
+Name:<text>
+A humanreadable identifier for the file. The value may contain spaces but must not contain line breaks.
+Examples:
+Code
+Name:Level Cost Table
+Name:Main Account Hero Data
+2.3.2 Date
+Code
+Date:<YYYY-MM-DD>
+Represents the date the file was created, exported, or last updated. The required format is:
+• Fourdigit year
+• Twodigit month
+• Twodigit day
+Example:
+Code
+Date:2025-12-24
+2.3.3 Time
+Code
+Time:<HH:MM:SS>
+Represents the time the file was created, exported, or last updated. The required format is 24hour time:
+• Hours (00–23)
+• Minutes (00–59)
+• Seconds (00–59)
+Example:
+Code
+Time:15:01:00
+2.3.4 Version
+Code
+Version:<text>
+Indicates the version of the file’s content, schema, or data set. The specification does not impose a versioning scheme; the value is freeform.
+Examples:
+Code
+Version:1.0
+Version:2025.12.24
+Version:Beta-3
+2.3.5 FileType
+Code
+FileType:<identifier>
+Identifies the file type as defined in Section 11. This field is required for all files that implement a specific file type definition.
+Examples:
+Code
+FileType:LevelCostTable
+FileType:HeroExperienceTable
+2.3.6 Optional Standard Fields
+Future versions of this specification may define additional standard header fields. All such fields must follow the rules of Section 2.1 and must remain compatible with existing files.
+2.3.7 Rule
+Code
+Rule:<text>
+
+The Rule: field declares a semantic rule that applies to the file’s data.
+Rule declarations allow files to define their own semantic constraints in
+addition to those defined by the file type (Section 11) and the universal
+semantic rules (Section 8).
+
+Rules declared using the Rule: field must follow these requirements:
+• The value may contain spaces but must not contain line breaks.
+• Multiple Rule: fields may appear in the Header Block.
+• Each Rule: field defines one semantic rule.
+• Rule text is free-form and interpreted according to Section 8.6
+  (Rule Precedence).
+• File-declared rules may refine or extend file-type rules, but may not
+  violate structural or type requirements.
+
+Examples:
+Code
+Rule:Cost must not exceed 100000
+Rule:Incremental cost is equal to the Cost value of the higher Level
+Rule:Level must be strictly increasing
+END OF SECTION 2.3
+=========================================================
+SECTION 3 — DATA BLOCK
+=========================================================
+The data block is defined by:
+Code
+Data:Begin
+... (optional data content)
+Data:End
+3.1 Data Block Rules
+• The data block may be empty.
+• All data content must appear between Data:Begin and Data:End.
+• The structure of the data content will be defined in later sections (e.g., tables, lists, records).
+3.2 Minimum Data Block
+Code
+Data:Begin
+Data:End
+=========================================================
+SECTION 4 — MINIMUM VALID FILE
+=========================================================
+A file containing only the required structural tags is valid:
+Code
+Header:Begin
+Header:End
+Data:Begin
+Data:End
+This is the foundational skeleton upon which all future rules and structures will be built.
+=========================================================
+SECTION 5 — EXTENSIBILITY
+=========================================================
+This specification is designed to be expanded over time. Future sections may define:
+• Required header fields
+• Optional header fields
+• Data table formats
+• Validation rules
+• Versioning rules
+• Error handling
+• Semantic constraints
+All expansions must remain compatible with the core structure defined in Sections 1–4.
+=========================================================
+SECTION 6 — COLUMNAR TABLE FORMAT
+=========================================================
+The Columnar Table Format is an optional data structure that may appear within the Data:Begin and Data:End block. This format fully conforms to all structural and behavioral requirements defined in Sections 1 through 5 of this specification. In particular, it respects the mandatory file skeleton, header/data block boundaries, and extensibility rules previously established.
+A file may contain zero or one Columnar Table within the Data Block.
+6.1 Columnar Table Structure
+A Columnar Table consists of:
+1. A header row containing column labels
+2. Zero or more data rows containing entries for each column
+The header row must be the first nonempty line after Data:Begin.
+Example:
+Code
+Data:Begin
+ColumnA   ColumnB   ColumnC
+value1A   value1B   value1C
+value2A   value2B   value2C
+Data:End
+6.2 Column Labels
+• The first line after Data:Begin must contain one or more column labels.
+• Each label must be a text string with no line breaks.
+• Labels must be separated by one or more whitespace characters.
+• Labels must be unique.
+• Labels are casesensitive.
+Valid examples:
+Code
+Level Cost
+Name Value Type
+Column1 Column2 Column3 Column4
+Invalid examples:
+• Duplicate labels: Value Value Type
+• Empty label: Value Type
+• Missing label row
+6.3 Data Rows
+Each subsequent nonempty line after the label row is interpreted as a data row.
+Rules:
+• Each row must contain the same number of fields as there are column labels.
+• Fields must be separated by one or more whitespace characters.
+• Fields may contain any text except line breaks.
+• Fields may not be empty unless future extensions explicitly allow empty fields.
+• Rows must appear sequentially with no intervening nontable content.
+Valid example:
+Code
+12   3400
+Invalid example:
+Code
+12   3400   extraField
+6.4 Empty Columnar Tables
+A Columnar Table may consist solely of the label row:
+Code
+Data:Begin
+Level Cost
+Data:End
+This is valid.
+6.5 Multiple Tables
+The Data Block may contain at most one Columnar Table. Future data structures must not conflict with this rule.
+6.6 Minimum Valid Columnar Table
+Code
+Data:Begin
+<one or more column labels>
+Data:End
+6.7 Error Conditions
+A Columnar Table is invalid if:
+• The label row is missing
+• The label row contains duplicate labels
+• A data row contains too few or too many fields
+• A data row appears before the label row
+• Nontable content appears between table rows
+• The table extends outside the Data Block
+END OF SECTION 6
+=========================================================
+SECTION 7 — TYPED COLUMNS
+=========================================================
+Typed Columns extend the Columnar Table Format by allowing each column to declare an expected data type. This section defines the rules governing column typing, type enforcement, and validation behavior.
+Typed Columns fully conform to Sections 1 through 6 of this specification and do not alter the required file skeleton, header/data boundaries, or Columnar Table structure.
+Typed Columns are optional. If no types are declared, all fields are treated as untyped text strings.
+7.1 Declaring Column Types
+Column types are declared by appending a type annotation to each column label using the following syntax:
+Code
+Label:Type
+Examples:
+Code
+Level:Integer   Cost:Integer
+Name:String     Value:Float     Enabled:Boolean
+7.1.1 Type Annotation Rules
+• A type annotation must follow the column label with a single colon (:).
+• Labels and types must not contain whitespace.
+• If a label contains a colon, it must be escaped or avoided (future extension).
+• If no type is provided, the column defaults to String.
+7.2 Supported Data Types
+The following primitive types are defined:
+String
+• Any sequence of characters except line breaks.
+• Leading/trailing whitespace is preserved.
+Integer
+• A sequence of digits with optional leading minus sign.
+• No decimal points allowed.
+Float
+• A numeric value that may contain a decimal point.
+• Optional leading minus sign.
+Boolean
+• Caseinsensitive values:
+o true, false
+o yes, no
+o 1, 0
+Future Types
+Additional types may be added in later sections without breaking compatibility.
+7.3 Data Row Type Enforcement
+Each field in a data row must conform to the type declared for its column.
+7.3.1 Validation Rules
+• If a column is typed as Integer, the field must be a valid integer.
+• If typed as Float, the field must be a valid floatingpoint number.
+• If typed as Boolean, the field must match one of the allowed boolean values.
+• If typed as String, any nonempty text is allowed.
+• Empty fields are invalid unless future extensions explicitly allow them.
+7.3.2 Examples
+Valid:
+Code
+Level:Integer   Cost:Integer
+1               500
+2               900
+Invalid:
+Code
+Level:Integer   Cost:Integer
+1               five
+7.4 Untyped Columns
+If a column label does not include a type annotation:
+• The column is treated as String.
+• No type validation is applied.
+Example:
+Code
+Data:Begin
+Name   Value:Integer
+Alice  10
+Bob    20
+Data:End
+Here, Name is a String column; Value is an Integer column.
+7.5 Mixed Typed and Untyped Columns
+Typed and untyped columns may appear together in any order.
+Example:
+Code
+Level:Integer   Description   Cost:Float
+1               Basic         100.0
+2               Advanced      250.5
+7.6 Error Conditions
+A Typed Column Table is invalid if:
+• A type annotation is malformed.
+• A data field does not conform to its declared type.
+• A column label contains more than one colon.
+• A typed column has an empty field (unless future rules allow it).
+• A type is declared that is not defined in this specification.
+END OF SECTION 7
+End of Part  of 2 parts
+
+
+
+Last War File Structure Specification
+Version 1.0
+December 26, 2025
+
+
+
+
+
+
+
+
+
+
