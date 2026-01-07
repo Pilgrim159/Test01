@@ -1,0 +1,18 @@
+Data:Global:Master Index
+Version:1.0
+Description:Master index file for the LastWarDataHub repository. Lists all global data files, schema files, and folder structure for deterministic retrieval.
+
+[Folders]
+global/
+players/
+schema/
+
+[Global Files]
+global/Level Upgrade Cost Table text version.txt
+
+[Schema Files]
+schema/File Format Specification Text Version.txt
+
+[Notes]
+This index file defines the canonical structure of the repository.
+All tools and scripts should reference files using these relative paths.
