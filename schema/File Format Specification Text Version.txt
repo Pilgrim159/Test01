@@ -1,8 +1,7 @@
-﻿LAST WAR BASIC FILE FORMAT SPECIFICATION (MASTER COPY)
-Part 1 of 2 Parts
+LAST WAR BASIC FILE FORMAT SPECIFICATION (MASTER COPY)
 PURPOSE OF THIS SPECIFICATION
 =========================================================
-This document defines the complete file format, structural rules, semantic rules, and validation requirements for all Last War data files. Its purpose is to ensure that an validator, parser, or AI assistant can reliably interpret, validate, and reason about files written in this format.
+This document defines the complete file format, structural rules, semantic rules, and validation requirements for all Last War data files. Its purpose is to ensure that a validator, parser, or AI assistant can reliably interpret, validate, and reason about files written in this format.
 This specification establishes:
 • The required file skeleton and structural tags
 • The rules governing header fields and metadata
@@ -17,7 +16,7 @@ This specification establishes:
 Any system reading a file written in this format must use this specification as the authoritative reference for how to interpret, validate, and process the file’s contents.
 END OF PURPOSE
 =========================================================
-Version: 1.0 — Stable Structure for Word Storage and Chat Reuse
+Version: 1.0 — Stable Structure for Word Storage and Chat Re use
 =========================================================
 SECTION 1 — FILE STRUCTURE OVERVIEW
 =========================================================
@@ -38,13 +37,13 @@ Header:Begin
 ... (optional header fields)
 Header:End
 2.1 Header Block Rules
-• The header block may be empty.
-• All header fields, if present, must appear between Header:Begin and Header:End.
-• Header fields use the format:
+•	The header block may be empty.
+•	All header fields, if present, must appear between Header:Begin and Header:End.
+•	Header fields use the format:
 Code
 Tag:Value
-• Tags must not be duplicated.
-• Values may contain spaces but not line breaks.
+•	Tags must not be duplicated.
+•	Values may contain spaces but not line breaks.
 2.2 Minimum Header Block
 Code
 Header:Begin
@@ -54,15 +53,15 @@ Header:End
 =========================================================
 This subsection defines a set of standard header fields that may appear in the Header Block of any file. These fields provide consistent metadata across all file types and support validation, versioning, and organization.
 Standard header fields do not alter the structure of the Header Block. They follow the same rules defined in Section 2.1:
-• Format: Tag:Value
-• Tags must not be duplicated
-• Values may contain spaces but not line breaks
-• Header fields may appear in any order
+•	Format: Tag:Value
+•	Tags must not be duplicated
+•	Values may contain spaces but not line breaks
+•	Header fields may appear in any order
 The Scope: field is defined separately in Section 10.
 2.3.1 Name
 Code
 Name:<text>
-A humanreadable identifier for the file. The value may contain spaces but must not contain line breaks.
+A human readable identifier for the file. The value may contain spaces but must not contain line breaks.
 Examples:
 Code
 Name:Level Cost Table
@@ -71,26 +70,26 @@ Name:Main Account Hero Data
 Code
 Date:<YYYY-MM-DD>
 Represents the date the file was created, exported, or last updated. The required format is:
-• Fourdigit year
-• Twodigit month
-• Twodigit day
+•	Four digit year
+•	Two digit month
+•	Two digit day
 Example:
 Code
 Date:2025-12-24
 2.3.3 Time
 Code
 Time:<HH:MM:SS>
-Represents the time the file was created, exported, or last updated. The required format is 24hour time:
-• Hours (00–23)
-• Minutes (00–59)
-• Seconds (00–59)
+Represents the time the file was created, exported, or last updated. The required format is 24 hour time:
+•	Hours (00–23)
+•	Minutes (00–59)
+•	Seconds (00–59)
 Example:
 Code
 Time:15:01:00
 2.3.4 Version
 Code
 Version:<text>
-Indicates the version of the file’s content, schema, or data set. The specification does not impose a versioning scheme; the value is freeform.
+Indicates the version of the file’s content, schema, or data set. The specification does not impose a versioning scheme; the value is free form.
 Examples:
 Code
 Version:1.0
@@ -139,9 +138,9 @@ Data:Begin
 ... (optional data content)
 Data:End
 3.1 Data Block Rules
-• The data block may be empty.
-• All data content must appear between Data:Begin and Data:End.
-• The structure of the data content will be defined in later sections (e.g., tables, lists, records).
+•	The data block may be empty.
+•	All data content must appear between Data:Begin and Data:End.
+•	The structure of the data content will be defined in later sections (e.g., tables, lists, records).
 3.2 Minimum Data Block
 Code
 Data:Begin
@@ -160,13 +159,13 @@ This is the foundational skeleton upon which all future rules and structures wil
 SECTION 5 — EXTENSIBILITY
 =========================================================
 This specification is designed to be expanded over time. Future sections may define:
-• Required header fields
-• Optional header fields
-• Data table formats
-• Validation rules
-• Versioning rules
-• Error handling
-• Semantic constraints
+•	Required header fields
+•	Optional header fields
+•	Data table formats
+•	Validation rules
+•	Versioning rules
+•	Error handling
+•	Semantic constraints
 All expansions must remain compatible with the core structure defined in Sections 1–4.
 =========================================================
 SECTION 6 — COLUMNAR TABLE FORMAT
@@ -175,9 +174,9 @@ The Columnar Table Format is an optional data structure that may appear within t
 A file may contain zero or one Columnar Table within the Data Block.
 6.1 Columnar Table Structure
 A Columnar Table consists of:
-1. A header row containing column labels
-2. Zero or more data rows containing entries for each column
-The header row must be the first nonempty line after Data:Begin.
+1.	A header row containing column labels
+2.	Zero or more data rows containing entries for each column
+The header row must be the first non empty line after Data:Begin.
 Example:
 Code
 Data:Begin
@@ -186,28 +185,28 @@ value1A   value1B   value1C
 value2A   value2B   value2C
 Data:End
 6.2 Column Labels
-• The first line after Data:Begin must contain one or more column labels.
-• Each label must be a text string with no line breaks.
-• Labels must be separated by one or more whitespace characters.
-• Labels must be unique.
-• Labels are casesensitive.
+•	The first line after Data:Begin must contain one or more column labels.
+•	Each label must be a text string with no line breaks.
+•	Labels must be separated by one or more whitespace characters.
+•	Labels must be unique.
+•	Labels are case sensitive.
 Valid examples:
 Code
 Level Cost
 Name Value Type
 Column1 Column2 Column3 Column4
 Invalid examples:
-• Duplicate labels: Value Value Type
-• Empty label: Value Type
-• Missing label row
+•	Duplicate labels: Value Value Type
+•	Empty label: Value Type
+•	Missing label row
 6.3 Data Rows
-Each subsequent nonempty line after the label row is interpreted as a data row.
+Each subsequent non empty line after the label row is interpreted as a data row.
 Rules:
-• Each row must contain the same number of fields as there are column labels.
-• Fields must be separated by one or more whitespace characters.
-• Fields may contain any text except line breaks.
-• Fields may not be empty unless future extensions explicitly allow empty fields.
-• Rows must appear sequentially with no intervening nontable content.
+•	Each row must contain the same number of fields as there are column labels.
+•	Fields must be separated by one or more whitespace characters.
+•	Fields may contain any text except line breaks.
+•	Fields may not be empty unless future extensions explicitly allow empty fields.
+•	Rows must appear sequentially with no intervening non table content.
 Valid example:
 Code
 12   3400
@@ -230,12 +229,12 @@ Data:Begin
 Data:End
 6.7 Error Conditions
 A Columnar Table is invalid if:
-• The label row is missing
-• The label row contains duplicate labels
-• A data row contains too few or too many fields
-• A data row appears before the label row
-• Nontable content appears between table rows
-• The table extends outside the Data Block
+•	The label row is missing
+•	The label row contains duplicate labels
+•	A data row contains too few or too many fields
+•	A data row appears before the label row
+•	Non table content appears between table rows
+•	The table extends outside the Data Block
 END OF SECTION 6
 =========================================================
 SECTION 7 — TYPED COLUMNS
@@ -252,36 +251,36 @@ Code
 Level:Integer   Cost:Integer
 Name:String     Value:Float     Enabled:Boolean
 7.1.1 Type Annotation Rules
-• A type annotation must follow the column label with a single colon (:).
-• Labels and types must not contain whitespace.
-• If a label contains a colon, it must be escaped or avoided (future extension).
-• If no type is provided, the column defaults to String.
+•	A type annotation must follow the column label with a single colon (:).
+•	Labels and types must not contain whitespace.
+•	If a label contains a colon, it must be escaped or avoided (future extension).
+•	If no type is provided, the column defaults to String.
 7.2 Supported Data Types
 The following primitive types are defined:
 String
-• Any sequence of characters except line breaks.
-• Leading/trailing whitespace is preserved.
+•	Any sequence of characters except line breaks.
+•	Leading/trailing whitespace is preserved.
 Integer
-• A sequence of digits with optional leading minus sign.
-• No decimal points allowed.
+•	A sequence of digits with optional leading minus sign.
+•	No decimal points allowed.
 Float
-• A numeric value that may contain a decimal point.
-• Optional leading minus sign.
+•	A numeric value that may contain a decimal point.
+•	Optional leading minus sign.
 Boolean
-• Caseinsensitive values:
-o true, false
-o yes, no
-o 1, 0
+•	Case insensitive values:
+o	true, false
+o	yes, no
+o	1, 0
 Future Types
 Additional types may be added in later sections without breaking compatibility.
 7.3 Data Row Type Enforcement
 Each field in a data row must conform to the type declared for its column.
 7.3.1 Validation Rules
-• If a column is typed as Integer, the field must be a valid integer.
-• If typed as Float, the field must be a valid floatingpoint number.
-• If typed as Boolean, the field must match one of the allowed boolean values.
-• If typed as String, any nonempty text is allowed.
-• Empty fields are invalid unless future extensions explicitly allow them.
+•	If a column is typed as Integer, the field must be a valid integer.
+•	If typed as Float, the field must be a valid floating point number.
+•	If typed as Boolean, the field must match one of the allowed boolean values.
+•	If typed as String, any non empty text is allowed.
+•	Empty fields are invalid unless future extensions explicitly allow them.
 7.3.2 Examples
 Valid:
 Code
@@ -294,8 +293,8 @@ Level:Integer   Cost:Integer
 1               five
 7.4 Untyped Columns
 If a column label does not include a type annotation:
-• The column is treated as String.
-• No type validation is applied.
+•	The column is treated as String.
+•	No type validation is applied.
 Example:
 Code
 Data:Begin
@@ -313,27 +312,492 @@ Level:Integer   Description   Cost:Float
 2               Advanced      250.5
 7.6 Error Conditions
 A Typed Column Table is invalid if:
-• A type annotation is malformed.
-• A data field does not conform to its declared type.
-• A column label contains more than one colon.
-• A typed column has an empty field (unless future rules allow it).
-• A type is declared that is not defined in this specification.
+•	A type annotation is malformed.
+•	A data field does not conform to its declared type.
+•	A column label contains more than one colon.
+•	A typed column has an empty field (unless future rules allow it).
+•	A type is declared that is not defined in this specification.
 END OF SECTION 7
-End of Part  of 2 parts
+=========================================================
+SECTION 8 — SEMANTIC VALIDATION RULES
+=========================================================
+Semantic Validation Rules define constraints on the meaning and relationships of data values within a Columnar Table. These rules operate after structural validation (Sections 1–6) and type validation (Section 7). They do not alter the file skeleton, the Columnar Table structure, or the Typed Column system.
+Semantic Validation Rules are optional. If no semantic rules are defined for a table, only structural and type validation apply.
+8.1 Purpose of Semantic Validation
+Semantic validation ensures that:
+•	Values make sense within the domain of the table
+•	Relationships between columns are logically consistent
+•	Constraints across rows are respected
+•	The table adheres to domain specific rules
+These rules allow the specification to enforce meaningful correctness, not just syntactic correctness.
+8.2 Categories of Semantic Rules
+Semantic rules fall into the following categories:
+8.2.1 Monotonicity Rules
+A column may be required to be:
+•	Strictly increasing
+•	Strictly decreasing
+•	Non decreasing
+•	Non increasing
+Example:
+Code
+Level:Integer must be strictly increasing
+Cost:Integer must be non-decreasing
+8.2.2 Uniqueness Rules
+A column may be required to contain unique values.
+Example:
+Code
+Level:Integer must be unique
+8.2.3 Cross Column Constraints
+Rules may define relationships between columns.
+Examples:
+•	Cost must always be greater than or equal to BaseCost
+•	MaxValue must be greater than MinValue
+•	EndTime must be after StartTime (future extension)
+8.2.4 Row to Row Constraints
+Rules may define relationships between adjacent rows.
+Examples:
+•	Cost[n] - Cost[n-1] must be non negative
+•	GrowthRate must not exceed a specified threshold
+8.2.5 Domain Specific Rules
+Rules may be defined for specific file types or game systems.
+Examples:
+•	Level values must start at 1 or 0
+•	No row may exceed a maximum allowed cost
+•	Certain columns may be required for certain table types
+8.3 Declaring Semantic Rules
+Semantic rules may be declared in one of two ways:
+8.3.1 Header Declared Rules
+Semantic rules may be expressed as header fields using the format:
+Code
+Rule:<rule text>
+Example:
+Code
+Rule:Level must be strictly increasing
+Rule:Cost must be non-decreasing
+8.3.2 Specification Defined Rules
+Certain table types may have built in semantic rules defined in future sections of this specification.
+Example (future):
+Code
+Level Cost tables must enforce:
+- Level strictly increasing
+- Cost non-decreasing
+8.4 Enforcement Order
+Semantic validation occurs after:
+1.	Structural validation (Sections 1–6)
+2.	Type validation (Section 7)
+If structural or type validation fails, semantic validation is not performed.
+8.5 Error Conditions
+A table fails semantic validation if:
+•	A monotonicity rule is violated
+•	A uniqueness rule is violated
+•	A cross column constraint is violated
+•	A row to row constraint is violated
+•	A domain specific rule is violated
+•	A declared rule references a non existent column
+•	A declared rule is syntactically malformed
+8.6 — Rule Precedence
+Semantic rules may originate from three sources:
+1. File-declared rules (Rule: fields in the Header Block)
+2. File-type required semantic rules (Section 11.x)
+3. Universal semantic rules (Section 8)
 
+To ensure deterministic and consistent validation behavior, semantic
+rules must be evaluated in the following order:
 
+8.6.1 File-Declared Rules (Highest Precedence)
+Rules declared within the Header Block using the format:
+    Rule:<rule text>
+take precedence over all other semantic rules. These rules may refine,
+extend, or override file-type or universal semantic rules, provided
+they do not violate structural or type requirements.
 
-Last War File Structure Specification
-Version 1.0
-December 26, 2025
+8.6.2 File-Type Required Semantic Rules
+Rules defined within a file type specification (Section 11.x) apply
+after all file-declared rules. These rules define the mandatory
+semantic behavior for the file type and must not be overridden by
+universal rules.
 
+8.6.3 Universal Semantic Rules (Lowest Precedence)
+Rules defined in Section 8 apply only after file-declared rules and
+file-type rules have been evaluated. Universal rules serve as a
+general semantic framework and must not override file-declared or
+file-type rules.
 
+8.6.4 Conflict Resolution
+If two rules at the same precedence level conflict, the file is
+considered invalid. If rules at different precedence levels conflict,
+the rule with higher precedence governs.
 
+END OF SECTION 8
+=========================================================
+SECTION 9 — ERROR REPORTING AND DIAGNOSTICS
+=========================================================
+This section defines how a parser or validator must report errors encountered during structural validation (Sections 1–6), type validation (Section 7), and semantic validation (Section 8). These rules ensure that all errors are reported in a consistent, predictable, and machine readable manner.
+Error Reporting and Diagnostics do not modify the file skeleton, the Columnar Table Format, or Typed Column behavior. They describe how a validating system must communicate problems, not how files are structured.
+9.1 Error Categories
+All errors must be classified into one of the following categories:
+9.1.1 Structural Errors
+Violations of Sections 1–6, such as:
+•	Missing required tags
+•	Tags out of order
+•	Multiple Columnar Tables
+•	Malformed label row
+•	Incorrect number of fields in a row
+9.1.2 Type Errors
+Violations of Section 7, such as:
+•	Invalid integer, float, or boolean values
+•	Malformed type annotations
+•	Fields that do not match declared types
+9.1.3 Semantic Errors
+Violations of Section 8, such as:
+•	Monotonicity violations
+•	Uniqueness violations
+•	Cross column constraint failures
+•	Domain specific rule violations
+9.2 Error Message Format
+Each error must be reported using the following structure:
+Code
+ErrorType: <Structural|Type|Semantic>
+Section: <section number>
+Code: <error code>
+Message: <human-readable description>
+Line: <line number or N/A>
+Column: <column number or N/A>
+9.2.1 Required Fields
+•	ErrorType One of: Structural, Type, Semantic.
+•	Section The section number of this specification that defines the violated rule.
+•	Code A short, machine readable identifier (e.g., S001, T004, SEM12).
+•	Message A human readable explanation of the error.
+•	Line / Column If applicable, the location of the error in the file. If not applicable, use N/A.
+9.3 Error Codes
+Error codes must follow this pattern:
+•	Structural errors: S###
+•	Type errors: T###
+•	Semantic errors: SEM###
+Examples:
+•	S001: Missing Header:Begin
+•	S014: Duplicate column label
+•	T003: Invalid integer value
+•	SEM007: Column must be strictly increasing
+Future sections may define additional codes.
+9.4 Multiple Errors
+A validator may:
+•	Stop after the first error, or
+•	Continue and report all errors found
+The behavior must be documented by the implementation.
+If multiple errors are reported:
+•	Each error must be listed separately
+•	Errors must not be merged
+•	The order of reporting is implementation defined
+9.5 Severity Levels
+Each error may optionally include a severity level:
+•	Error — The file is invalid
+•	Warning — The file is valid but may contain suspicious or suboptimal data
+•	Info — Non critical diagnostic information
+Severity levels do not change the meaning of the error categories.
+9.6 Examples
+9.6.1 Structural Error Example
+Code
+ErrorType: Structural
+Section: 6
+Code: S014
+Message: Duplicate column label 'Cost'
+Line: 3
+Column: N/A
+9.6.2 Type Error Example
+Code
+ErrorType: Type
+Section: 7
+Code: T003
+Message: Invalid integer value 'five'
+Line: 12
+Column: 2
+9.6.3 Semantic Error Example
+Code
+ErrorType: Semantic
+Section: 8
+Code: SEM001
+Message: Column 'Level' must be strictly increasing
+Line: 25
+Column: 1
+9.7 Validity Determination
+A file is considered invalid if:
+•	Any Structural error is reported
+•	Any Type error is reported
+•	Any Semantic error with severity “Error” is reported
+Warnings and informational messages do not invalidate a file.
+END OF SECTION 9
+=========================================================
+SECTION 10 — SCOPE
+=========================================================
+Scope defines which game accounts a file’s data applies to. Because a player may maintain multiple accounts in Last War, each file must be interpreted within a defined scope so that global data and account specific data can coexist without conflict.
+Scope does not alter the file skeleton, the Columnar Table Format, Typed Columns, or validation rules. It determines how validated data is used, not how it is structured.
+10.1 Scope Categories
+Two scope categories are defined:
+10.1.1 Global Scope
+Data with Global scope applies to all accounts owned or managed by the user.
+10.1.2 Account Scope
+Data with Account scope applies only to a specific account.
+10.2 Declaring Scope
+Scope is declared in the Header Block using the following field:
+Code
+Scope:<value>
+Where <value> must be one of:
+•	Global
+•	Account:<AccountIdentifier>
+The <AccountIdentifier> is a user defined text string with no line breaks.
+10.3 Header Field Ordering
+10.3.1 Header Fields Are Unordered
+All header fields, including the Scope: field, may appear in any order within the Header Block, provided they remain between:
+Code
+Header:Begin
+...
+Header:End
+There is no required ordering of header fields in this specification.
+10.3.2 Required Presence, Not Required Position
+Although the Scope: field is required, its position relative to other header fields is not constrained.
+The following examples are all valid:
+Code
+Header:Begin
+Scope:Global
+Version:1.0
+Header:End
+Code
+Header:Begin
+Version:1.0
+Scope:Account:MyMain
+Header:End
+Code
+Header:Begin
+Date:2025-12-23
+Scope:Global
+Name:LevelCostTable
+Header:End
+10.4 Scope Rules
+10.4.1 Required Scope Field
+Every file must include a Scope: field in the Header Block.
+10.4.2 Global Scope Behavior
+•	Applies to all accounts.
+•	Account scoped data overrides global data for that account.
+10.4.3 Account Scope Behavior
+•	Applies only to the specified account.
+•	Must not affect other accounts.
+10.4.4 Scope Isolation
+Account scoped files must not reference or depend on data from other accounts.
+10.5 Interaction with Other Sections
+•	Header Block (Section 2): Scope: is a standard header field.
+•	Data Block (Section 3): Scope does not change data structure.
+•	Columnar Tables (Section 6): Allowed in any scope.
+•	Typed Columns (Section 7): Behave identically in all scopes.
+•	Semantic Rules (Section 8): May be global or account specific; account rules override global rules.
+10.6 Error Conditions
+A file fails scope validation if:
+•	The Scope: field is missing
+•	The scope value is malformed
+•	An account scoped file references another account
+•	A global file references account specific identifiers
+•	Conflicting account identifiers appear across files (future extension)
+END OF SECTION 10
+=========================================================
+SECTION 11 — FILE TYPE DEFINITIONS
+=========================================================
+This section defines how specific file types are described within this specification. A file type is a named category of file with:
+•	Required header fields
+•	Required scope
+•	Required data structures
+•	Required column definitions
+•	Required types
+•	Required semantic rules
+•	Optional extensions
+File types do not modify the universal rules defined in Sections 1–10. Instead, they apply additional constraints on top of those rules.
+11.1 Purpose of File Types
+File types allow this specification to define:
+•	Standardized structures for common Last War data
+•	Consistent validation rules
+•	Predictable behavior across accounts
+•	Clear separation between global and account specific data
+Examples of file types include:
+•	Level Cost Table
+•	Hero Experience Table
+•	Building Upgrade Table
+•	Resource Production Table
+•	Research Cost Table
+Each file type is defined in its own subsection.
+11.2 File Type Definition Structure
+Each file type definition must include the following components:
+11.2.1 File Type Name
+A unique name identifying the file type.
+Example:
+Code
+FileType:LevelCostTable
+11.2.2 Required Header Fields
+A list of header fields that must appear in the file.
+Example:
+•	Name:
+•	Version:
+•	Scope:
+•	FileType:
+11.2.3 Required Scope
+Each file type must specify whether it is:
+•	Global only
+•	Account only
+•	Allowed in either scope
+11.2.4 Required Data Structure
+Each file type must specify the required data structure inside the Data Block.
+Examples:
+•	Must contain a Columnar Table
+•	Must contain exactly one table
+•	Must contain no additional data structures
+11.2.5 Required Columns
+Each file type must define:
+•	Column names
+•	Column order (if required)
+•	Whether columns must be typed
+•	Whether columns must be unique
+Example:
+Code
+Columns:
+- Level:Integer
+- Cost:Integer
+11.2.6 Required Semantic Rules
+Each file type may define semantic rules that apply specifically to that type.
+Examples:
+•	Level must be strictly increasing
+•	Cost must be non decreasing
+•	No row may exceed a maximum allowed value
+11.2.7 Optional Fields or Extensions
+File types may define optional:
+•	Header fields
+•	Columns
+•	Semantic rules
+•	Metadata
+11.3 Validation Order for File Types
+Validation for a file type occurs in the following order:
+1.	Structural validation (Sections 1–6)
+2.	Type validation (Section 7)
+3.	Semantic validation (Section 8)
+4.	Scope validation (Section 10)
+5.	File type–specific validation (Section 11)
+A file is valid only if it passes all applicable validation stages.
+11.4 Error Conditions
+A file fails file type validation if:
+•	Required header fields are missing
+•	Required columns are missing
+•	Columns appear in the wrong order (if order is required)
+•	Required types are not declared
+•	Required semantic rules are violated
+•	The file uses a scope not permitted for that file type
+•	The file contains additional structures not allowed by the file type
+11.5 Defining New File Types
+New file types may be added in future subsections:
+•	11.1.x for global file types
+•	11.2.x for account specific file types
+•	11.3.x for hybrid file types
+Each new file type must follow the structure defined in Section 11.2.
+END OF SECTION 11
+========================================================= 
+11.1 LEVEL COST TABLE =========================================================
+The Level Cost Table defines the resource cost required to advance a game element from one level to the next. This file type uses a single Columnar Table with typed columns and mandatory semantic rules.
+This file type conforms to all universal rules defined in Sections 1–10.
+11.1.1 File Type Name
+Code
+FileType:LevelCostTable
+This value must appear in the Header Block.
+11.1.2 Required Header Fields
+The following header fields must appear:
+• Name: • Version: • Scope: • FileType:
+Optional standard fields (Section 2.3.6) may also appear.
+Example:
+Code
+Name:Level Cost Table
+Version:1.0
+Scope:Global
+FileType:LevelCostTable
+11.1.3 Required Scope
+The Level Cost Table is permitted in:
+• Global scope • Account scope
+Therefore:
+• Scope:Global is valid • Scope:Account:<AccountIdentifier> is valid
+No additional restrictions apply.
+11.1.4 Required Data Structure
+The Data Block must contain exactly one Columnar Table.
+Rules:
+• The table must follow all rules in Section 6. • No additional data structures may appear. • The table may contain zero or more data rows.
+11.1.5 Required Columns
+The Level Cost Table must contain the following columns in this exact order:
+1.	Level:Integer
+2.	Cost:Integer
+Column Rules:
+• Both columns must be typed. • Column labels must match exactly, including case. • No additional required columns. • Optional columns may appear after the required columns.
+Example Label Row:
+Code
+Level:Integer   Cost:Integer
+Optional Additional Columns:
+Code
+Level:Integer   Cost:Integer   Notes:String
+Optional columns must follow all rules in Sections 6 and 7.
+11.1.6 Required Semantic Rules
+The Level Cost Table must satisfy the following semantic rules:
+Rule 1 — Level must increase by exactly 1 per row
+Code
+Level[n] - Level[n-1] = 1
+Rule 2 — Cost must be non-decreasing
+Code
+Cost[n] >= Cost[n-1]
+Rule 3 — Level must start at 1
+The first row must satisfy:
+Code
+Level = 1
+Rule 4 — Cost must be non-negative
+Code
+Cost >= 0
+These rules are enforced during semantic validation (Section 8).
+11.1.7 Optional Semantic Rules
+Optional rules may be declared in the header using Rule: fields.
+Examples:
+Code
+Rule:Cost must not exceed 100000
+Rule:Maximum level is 120
+Optional rules must not contradict required rules.
+11.1.8 Error Conditions
+A Level Cost Table is invalid if:
+• Required header fields are missing • Required columns are missing • Required columns appear in the wrong order • Required columns are untyped • A Level value does not increase by exactly 1 • The first Level is not 1 • A Cost value decreases • Any Cost value is negative • The Data Block contains more than one table • The table violates any structural or type rule
+Errors must be reported using the format defined in Section 9.
+END OF SECTION 11.1
+=========================================================
+SECTION 12 — VALIDATION BEHAVIOR RULES
+=========================================================
+This section defines mandatory behaviors for any validator
+implementing this specification. These rules override any
+implicit or default validator behavior.
 
+12.1 Validator Interpretation Rules
+Validators must interpret semantic rules according to the
+following principles:
+• If multiple interpretations are possible, the validator
+  must choose the interpretation that results in a valid file.
+• Validators must not infer errors unless the violation is
+  explicitly provable from the file content.
 
+12.2 Non-Decreasing Interpretation
+For the purposes of this specification, a column declared
+as "non-decreasing" must be validated using:
+    Value[n] >= Value[n-1]
+Validators must not report a violation unless this condition
+is explicitly false.
 
+12.3 Error Suppression Rules
+Validators must not generate hypothetical or illustrative
+errors during validation. All reported errors must be
+derived directly from the file content.
 
+12.4 Deterministic Output
+Validators must produce deterministic results for identical
+input files. No probabilistic or heuristic behavior is
+permitted.
 
+END OF SECTION 12
+END OF SPECIFICATION (VERSION 1.0)
 
 
 
